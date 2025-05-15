@@ -34,7 +34,7 @@
     <label>Tanggal Expired</label>
     <input type="date" name="tgl_exp" class="form-control mb-2" value="{{ old('tgl_exp') }}">
 
-    <label>Jumlah</label>
+    <label>Jumlah Masuk</label>
     <input type="number" name="jumlah" class="form-control mb-2" value="{{ old('jumlah') }}">
 
     <button type="submit" class="btn btn-primary">Simpan</button>

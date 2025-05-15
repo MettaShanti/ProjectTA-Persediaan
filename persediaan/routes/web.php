@@ -29,4 +29,8 @@ Route::resource('supplier', SupplierController::class);//->middleware(['auth', '
 Route::resource('stok', StokController::class);//->middleware(['auth', 'verified', 'Ceklevel:user']);
 Route::resource('user', UserController::class);//->middleware(['auth', 'verified', 'Ceklevel:user']);
 
-require __DIR__.'/auth.php';
+//laporan produk masuk
+
+Route::get('/produk-masuk/laporan/cetak', [ProdukMasukController::class, 'cetakLaporan'])->name('produkMasuk.cetak');
+
+//Route::get('/laporan/produk-masuk', [App\Http\Controllers\ProdukMasukController::class, 'laporan'])->name('produkMasuk.laporan');require __DIR__.'/auth.php';

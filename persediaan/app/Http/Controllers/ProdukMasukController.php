@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\produk;
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\produkMasuk;
 use Illuminate\Http\Request;
 
@@ -25,19 +26,35 @@ class ProdukMasukController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'kode_produk' => 'required',
-            'nama_produk' => 'required|string|max:30',
-            'tgl_masuk' => 'required|date',
-            'tgl_produksi' => 'required|date',
-            'tgl_exp' => 'required|date',
-            'jumlah' => 'required|integer|min:1',
-            'produk_id' => 'required|exists:produks,id',
-        ]);
+       $validated = $request->validate([
+        'kode_produk' => 'required',
+        'nama_produk' => 'required|string|max:30',
+        'tgl_masuk' => 'required|date',
+        'tgl_produksi' => 'required|date',
+        'tgl_exp' => 'required|date',
+        'jumlah' => 'required|integer|min:1',
+        'produk_id' => 'required|exists:produks,id',
+    ]);
 
+    // Cek apakah sudah ada kode_produk yang sama
+    $existing = ProdukMasuk::where('kode_produk', $validated['kode_produk'])->first();
+
+    if ($existing) {
+        // Jika ada, update jumlah
+        $existing->jumlah += $validated['jumlah'];
+        $existing->nama_produk = $validated['nama_produk'];
+        $existing->tgl_masuk = $validated['tgl_masuk'];
+        $existing->tgl_produksi = $validated['tgl_produksi'];
+        $existing->tgl_exp = $validated['tgl_exp'];
+        $existing->produk_id = $validated['produk_id'];
+        $existing->save();
+    } else {
+        // Jika tidak ada, buat baru
         ProdukMasuk::create($validated);
+    }
 
-        return redirect()->route('produkMasuk.index')->with('success', 'Produk masuk berhasil ditambahkan');
+    return redirect()->route('produkMasuk.index')->with('success', 'Produk masuk berhasil ditambahkan');
+    
     }
 
     public function edit($id)
@@ -70,4 +87,12 @@ class ProdukMasukController extends Controller
         $produkMasuk->delete();
         return redirect()->route('produkMasuk.index')->with('success', 'Produk masuk berhasil dihapus');
     }
+
+    public function cetakLaporan()
+{
+    $produkMasuk = ProdukMasuk::with('produk')->get();
+
+    $pdf = Pdf::loadView('produkMasuk.laporan', compact('produkMasuk'));
+    return $pdf->download('laporan-produk-masuk.pdf');
+}
 }

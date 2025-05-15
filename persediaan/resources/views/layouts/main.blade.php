@@ -88,8 +88,12 @@
       </a>
       <div class="collapse" id="collapseLaporan" data-bs-parent="#accordionSidenav">
         <ul class="nav flex-column ms-4">
-          <li class="nav-item"><a class="nav-link" href="#">Laporan Produk Masuk</a></li>
-          <li class="nav-item"><a class="nav-link" href="#">Laporan Produk Keluar</a></li>
+<li class="nav-item">
+    <a class="nav-link" href="{{ route('produkMasuk.laporan') }}">Laporan Produk Masuk</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="#">Laporan Produk Keluar</a>
+</li>
         </ul>
       </div>
     </li>

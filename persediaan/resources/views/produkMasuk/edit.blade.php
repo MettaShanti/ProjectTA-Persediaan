@@ -8,11 +8,23 @@
 
     <label>Kode Produk</label>
     @error('kode_produk') <span class="text-danger">({{ $message }})</span> @enderror
-    <input type="text" name="kode_produk" class="form-control mb-2" value="{{ old('kode_produk', $produkMasuk->kode_produk) }}">
+    <select name="kode_produk" id="kode_produk" class="form-control mb-2">
+        <option value="">-- Pilih Kode Produk --</option>
+        @foreach($produks as $produk)
+            <option value="{{ $produk->kode_produk }}"
+                data-nama="{{ $produk->nama_produk }}"
+                data-id="{{ $produk->id }}"
+                {{ old('kode_produk', $produkMasuk->kode_produk) == $produk->kode_produk ? 'selected' : '' }}>
+                {{ $produk->kode_produk }}
+            </option>
+        @endforeach
+    </select>
 
     <label>Nama Produk</label>
     @error('nama_produk') <span class="text-danger">({{ $message }})</span> @enderror
-    <input type="text" name="nama_produk" class="form-control mb-2" value="{{ old('nama_produk', $produkMasuk->nama_produk) }}">
+    <input type="text" name="nama_produk" id="nama_produk" class="form-control mb-2" value="{{ old('nama_produk', $produkMasuk->nama_produk) }}" readonly>
+
+    <input type="hidden" name="produk_id" id="produk_id" value="{{ old('produk_id', $produkMasuk->produk_id) }}">
 
     <label>Tanggal Masuk</label>
     @error('tgl_masuk') <span class="text-danger">({{ $message }})</span> @enderror
@@ -30,17 +42,23 @@
     @error('jumlah') <span class="text-danger">({{ $message }})</span> @enderror
     <input type="number" name="jumlah" class="form-control mb-2" value="{{ old('jumlah', $produkMasuk->jumlah) }}">
 
-    <label>Pilih Produk</label>
-    @error('produk_id') <span class="text-danger">({{ $message }})</span> @enderror
-    <select name="produk_id" class="form-control mb-2">
-        <option value="">-- Pilih Produk --</option>
-        @foreach($produks as $produk)
-            <option value="{{ $produk->id }}" {{ old('produk_id', $produkMasuk->produk_id) == $produk->id ? 'selected' : '' }}>
-                {{ $produk->nama_produk }}
-            </option>
-        @endforeach
-    </select>
-
     <button type="submit" class="btn btn-primary mt-2">Update</button>
 </form>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const kodeProduk = document.getElementById('kode_produk');
+    const namaProduk = document.getElementById('nama_produk');
+    const produkId = document.getElementById('produk_id');
+
+    function updateProdukInfo() {
+        const selected = kodeProduk.options[kodeProduk.selectedIndex];
+        namaProduk.value = selected.getAttribute('data-nama') || '';
+        produkId.value = selected.getAttribute('data-id') || '';
+    }
+
+    kodeProduk.addEventListener('change', updateProdukInfo);
+    updateProdukInfo(); // jalankan saat halaman dimuat
+});
+</script>
 @endsection
