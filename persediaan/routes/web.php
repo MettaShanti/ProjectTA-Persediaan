@@ -7,6 +7,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StokController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -29,8 +30,13 @@ Route::resource('supplier', SupplierController::class);//->middleware(['auth', '
 Route::resource('stok', StokController::class);//->middleware(['auth', 'verified', 'Ceklevel:user']);
 Route::resource('user', UserController::class);//->middleware(['auth', 'verified', 'Ceklevel:user']);
 
+
+// logout
+Route::post('/logout', function () {
+    Auth::logout();
+    return redirect('/login');
+})->name('logout');
+
 //laporan produk masuk
-
-Route::get('/produk-masuk/laporan/cetak', [ProdukMasukController::class, 'cetakLaporan'])->name('produkMasuk.cetak');
-
-//Route::get('/laporan/produk-masuk', [App\Http\Controllers\ProdukMasukController::class, 'laporan'])->name('produkMasuk.laporan');require __DIR__.'/auth.php';
+Route::get('/laporanpm', [ProdukMasukController::class, 'indexLaporan'])->name('laporanpm.index');
+Route::get('/laporanpm/cetak', [ProdukMasukController::class, 'cetakLaporan'])->name('laporanpm.cetak');

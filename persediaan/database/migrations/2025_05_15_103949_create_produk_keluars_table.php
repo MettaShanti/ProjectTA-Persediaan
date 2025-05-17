@@ -18,9 +18,13 @@ return new class extends Migration
             $table->date('tgl_keluar');
             $table->date('tgl_exp');
             $table->integer('jumlah');
+            $table->string('satuan', 15);
             $table->string('status');
+            
             $table->unsignedBigInteger('produk_id');
             $table->foreign('produk_id')->references('id')->on('produks');
+            $table->unsignedBigInteger('stok_id');
+            $table->foreign('stok_id')->references('id')->on('stoks');
             $table->timestamps();
         });
     }

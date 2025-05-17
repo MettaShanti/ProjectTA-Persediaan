@@ -88,11 +88,29 @@ class ProdukMasukController extends Controller
         return redirect()->route('produkMasuk.index')->with('success', 'Produk masuk berhasil dihapus');
     }
 
-    public function cetakLaporan()
-{
-    $produkMasuk = ProdukMasuk::with('produk')->get();
+    //cetak laporan produk masuk
+    public function indexLaporan(Request $request)
+    {
+        $query = \App\Models\ProdukMasuk::query();
 
-    $pdf = Pdf::loadView('produkMasuk.laporan', compact('produkMasuk'));
-    return $pdf->download('laporan-produk-masuk.pdf');
-}
+        if ($request->filled('tanggal_awal') && $request->filled('tanggal_akhir')) {
+            $query->whereBetween('tgl_masuk', [$request->tanggal_awal, $request->tanggal_akhir]);
+        }
+
+        $produkMasuk = $query->get();
+        return view('laporanpm.index', compact('produkMasuk'));
+    }
+
+    public function cetakLaporan(Request $request)
+    {
+        $query = \App\Models\ProdukMasuk::query();
+
+        if ($request->filled('tanggal_awal') && $request->filled('tanggal_akhir')) {
+            $query->whereBetween('tgl_masuk', [$request->tanggal_awal, $request->tanggal_akhir]);
+        }
+
+        $produkMasuk = $query->get();
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('laporanpm.laporan', compact('produkMasuk'));
+        return $pdf->download('laporan-produk-masuk.pdf');
+    }
 }

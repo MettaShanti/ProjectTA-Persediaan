@@ -3,7 +3,6 @@
 @section('content')
 <h4>Daftar Produk Masuk</h4>
 <a href="{{ route('produkMasuk.create') }}" class="btn btn-primary mb-2">Tambah Produk Masuk</a>
-<a href="{{ route('produkMasuk.cetak') }}" class="btn btn-primary" target="_blank">Cetak PDF</a>
 
 <div class="table-responsive">
     <table class="table table-striped table-bordered table-hover">
